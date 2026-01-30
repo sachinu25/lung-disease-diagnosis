@@ -1,31 +1,85 @@
 #  Xray Lung Classifier
 
 ## Problem statement
-Pneumonia is an inflammatory condition of the lung affecting primarily the small air sacs known as alveoli.Symptoms typically include some combination of productive or dry cough, chest pain, fever and difficulty breathing. The severity of the condition is variable. Pneumonia is usually caused by infection with viruses or bacteria and less commonly by other microorganisms, certain medications or conditions such as autoimmune diseases.Risk factors include cystic fibrosis, chronic obstructive pulmonary disease (COPD), asthma, diabetes, heart failure, a history of smoking, a poor ability to cough such as following a stroke and a weak immune system. Diagnosis is often based on symptoms and physical examination. Chest X-ray, blood tests, and culture of the sputum may help confirm the diagnosis.The disease may be classified by where it was acquired, such as community- or hospital-acquired or healthcare-associated pneumonia.
-Our task is to create a API whichs predict whether the given images are penumonia or not.
+Pneumonia is an inflammatory condition of the lungs that primarily affects the alveoli (small air sacs). It is commonly caused by bacterial or viral infections and presents symptoms such as cough, chest pain, fever, and difficulty breathing. The severity varies depending on the patient’s health condition and immune response.
+
+Early and accurate diagnosis is critical for effective treatment. Chest X-ray imaging is one of the most widely used diagnostic tools.
+The objective of this project is to build an end-to-end deep learning–based API that classifies chest X-ray images as Pneumonia or Normal.
 
 ## Solution Proposed
-The solution proposed for the above problem is that we have used Computer vision to solve the above problem to classify the data. We have used the Pytorch
-framework to solve the above problem also we have have created our custom CNN network with the help of pytorch. Then we have created a API which takes in the images and predicts wheter a person is having Pneumonia or not. Then we have dockerized the application and deployed the model on AWS cloud.
+This project uses Computer Vision and Deep Learning to automatically detect pneumonia from chest X-ray images.
 
+Key Highlights:
+
+A custom Convolutional Neural Network (CNN) is built using PyTorch
+
+The trained model is exposed via a FastAPI service
+
+The application is Dockerized for portability
+
+Deployed on AWS Cloud using modern MLOps practices
+
+CI/CD enabled using GitHub Actions
+
+🧠 Model Architecture
+
+Custom CNN architecture
+
+Optimized for binary image classification
+
+Designed to balance accuracy and inference speed
+
+📁 xray_arch/ contains the CNN architecture definition.
 
 ![xray_arch](https://user-images.githubusercontent.com/71321529/216753362-aeb34400-d21d-4b21-b2ce-63b86a47b594.jpg)
 
 ## Dataset used
-The dataset was shared by Apollo diagnostic center for research purpose. So we hvae created a POC with the given data.
+Dataset provided by Apollo Diagnostic Center for research purposes
+
+Contains labeled Chest X-ray images
+
+Used strictly for Proof of Concept (POC)
+
+⚠️ Dataset is not publicly shared due to confidentiality
 
 ## Tech Stack Used
-1. Python 
-2. FastAPI 
-3. Pytorch
-4. Docker
-5. AWS
-6. Azure
+Programming Language: Python
+
+Deep Learning Framework: PyTorch
+
+API Framework: FastAPI
+
+Containerization: Docker
+
+Cloud Platforms: AWS, Azure
+
+CI/CD: GitHub Actions
 
 ## Infrastructure required
-1. AWS S3
-2. AWS App Runner
-3. Github Actions
+AWS S3 – Model and artifact storage
+
+AWS App Runner – Application deployment
+
+GitHub Actions – Continuous Integration & Deployment
+
+
+📂 Project Structure
+
+xray/
+│
+├── components/
+│   ├── data_ingestion
+│   ├── data_transformation
+│   ├── model_training
+│   ├── model_evaluation
+│   └── model_pusher
+│
+├── logger/
+├── exception/
+├── app.py
+├── Dockerfile
+├── requirements.txt
+└── README.md
 
 ## How to run
 
@@ -96,5 +150,4 @@ docker run -d -p 8001:8001 -e AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID> -e AWS_SECRE
 **Custom Logger and Exceptions** are used in the Project for better debugging purposes.
 
 ## Conclusion
-- The project we have created can also be in real-life by doctors to check whether the person is having Pneumonia or not. It will help doctors to take
-better decisions.
+This project demonstrates a real-world medical AI application capable of assisting doctors in pneumonia diagnosis using chest X-ray images. While not intended to replace clinical judgment, it can serve as a decision-support tool to improve diagnostic efficiency and accuracy.
