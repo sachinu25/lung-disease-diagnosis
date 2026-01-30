@@ -154,6 +154,9 @@ docker run -d -p 8001:8001 -e AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID> -e AWS_SECRE
 - model_evaluation
 - model_pusher
 
+
+
+
 ![Model Accuracy](https://img.shields.io/badge/Model%20Accuracy-92%25-success)
 ![Docker Image Size](https://img.shields.io/badge/Docker%20Image-850MB-blue?logo=docker)
 ![Live Deployment](https://img.shields.io/badge/Deployment-Live-brightgreen?logo=amazonaws)
@@ -187,85 +190,17 @@ F1-Score	92.2%
 
 🧠 Metric Definitions
 ✅ Accuracy
-Accuracy
-=
-𝑇
-𝑃
-+
-𝑇
-𝑁
-𝑇
-𝑃
-+
-𝑇
-𝑁
-+
-𝐹
-𝑃
-+
-𝐹
-𝑁
-Accuracy=
-TP+TN+FP+FN
-TP+TN
-	​
-
-
 Measures overall correctness but can be misleading for imbalanced datasets.
 
 ✅ Precision
-Precision
-=
-𝑇
-𝑃
-𝑇
-𝑃
-+
-𝐹
-𝑃
-Precision=
-TP+FP
-TP
-	​
-
-
 Indicates how many predicted pneumonia cases were actually pneumonia.
 
 ✅ Recall (Sensitivity)
-Recall
-=
-𝑇
-𝑃
-𝑇
-𝑃
-+
-𝐹
-𝑁
-Recall=
-TP+FN
-TP
-	​
-
-
+	
 Critical in healthcare — measures how many actual pneumonia cases were correctly detected.
 
 ✅ F1-Score
-F1
-=
-2
-×
-Precision
-×
-Recall
-Precision
-+
-Recall
-F1=2×
-Precision+Recall
-Precision×Recall
-	​
-
-
+​
 Balances Precision and Recall — preferred metric for medical diagnosis tasks.
 
 🎯 Why F1-Score Matters Here 
