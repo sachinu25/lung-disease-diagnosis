@@ -186,22 +186,40 @@ Precision	91.4%
 Recall (Sensitivity)	93.0%
 F1-Score	92.2%
 
-⚠️ Replace the values above with your actual evaluated results if different.
+
 
 🧠 Metric Definitions
+
+
 ✅ Accuracy
+
 Measures overall correctness but can be misleading for imbalanced datasets.
 
+
+
+
 ✅ Precision
+
 Indicates how many predicted pneumonia cases were actually pneumonia.
+
+
+
 
 ✅ Recall (Sensitivity)
 	
 Critical in healthcare — measures how many actual pneumonia cases were correctly detected.
 
+
+
+
 ✅ F1-Score
 ​
 Balances Precision and Recall — preferred metric for medical diagnosis tasks.
+
+
+
+
+
 
 🎯 Why F1-Score Matters Here 
 
