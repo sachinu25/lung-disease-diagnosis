@@ -185,7 +185,7 @@ F1-Score	92.2%
 
 ⚠️ Replace the values above with your actual evaluated results if different.
 
-🧠 Metric Definitions (Interview-Ready)
+🧠 Metric Definitions
 ✅ Accuracy
 Accuracy
 =
