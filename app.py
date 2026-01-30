@@ -1,27 +1,32 @@
-# fast api application for x-ray image classification
 
+import os
 import torch
-from xray.ml.model.arch import Net  # Ensure this path is correct
-import torchvision.transforms as transforms
-from PIL import Image
 from fastapi import FastAPI, UploadFile, File
+from PIL import Image
+from io import BytesIO
+import torchvision.transforms as transforms
 
-app = FastAPI()
+from xray.ml.model.arch import Net 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+app = FastAPI(title="X-ray Pneumonia Detection API")
 
-# Initialize and load model weights
+
+device = torch.device("cpu")
+
+# Load model
+MODEL_PATH = os.path.join(os.getcwd(), "xray_model.pth")
+
 model = Net().to(device)
-model.load_state_dict(torch.load("xray_model.pth", map_location=device))
+model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.eval()
 
-# Transformations
+# Image transformations
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
 ])
 
-# Prediction label mapping
+# Label mapping
 label_map = {
     0: "Normal",
     1: "Pneumonia"
@@ -30,21 +35,22 @@ label_map = {
 @app.get("/")
 def root():
     return {
-        "message": "X-ray Diagnosis API is running. Visit /docs for Swagger UI.",
+        "message": "X-ray Diagnosis API is running",
         "docs": "/docs"
     }
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    image = Image.open(file.file).convert("RGB")
+    image_bytes = await file.read()
+    image = Image.open(BytesIO(image_bytes)).convert("RGB")
+
     input_tensor = transform(image).unsqueeze(0).to(device)
-    
+
     with torch.no_grad():
         output = model(input_tensor)
-        prediction_index = torch.argmax(output, dim=1).item()
-        prediction_label = label_map.get(prediction_index, "Unknown")
-    
+        pred_idx = torch.argmax(output, dim=1).item()
+
     return {
-        "prediction_index": prediction_index,
-        "prediction_label": prediction_label
+        "prediction_index": pred_idx,
+        "prediction_label": label_map[pred_idx]
     }
