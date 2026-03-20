@@ -16,13 +16,14 @@ CLASS_LABEL_1: str = "NORMAL"
 
 CLASS_LABEL_2: str = "PNEUMONIA"
 
-BRIGHTNESS: int = 0.10
+# Augmentation constants
+BRIGHTNESS: float = 0.15
 
-CONTRAST: int = 0.1
+CONTRAST: float = 0.15
 
-SATURATION: int = 0.10
+SATURATION: float = 0.10
 
-HUE: int = 0.1
+HUE: float = 0.05
 
 RESIZE: int = 224
 
@@ -30,9 +31,9 @@ CENTERCROP: int = 224
 
 RANDOMROTATION: int = 10
 
-NORMALIZE_LIST_1: List[int] = [0.485, 0.456, 0.406]
+NORMALIZE_LIST_1: List[float] = [0.485, 0.456, 0.406]
 
-NORMALIZE_LIST_2: List[int] = [0.229, 0.224, 0.225]
+NORMALIZE_LIST_2: List[float] = [0.229, 0.224, 0.225]
 
 TRAIN_TRANSFORMS_KEY: str = "xray_train_transforms"
 
@@ -40,7 +41,7 @@ TRAIN_TRANSFORMS_FILE: str = "train_transforms.pkl"
 
 TEST_TRANSFORMS_FILE: str = "test_transforms.pkl"
 
-BATCH_SIZE: int = 2
+BATCH_SIZE: int = 32
 
 SHUFFLE: bool = False
 
@@ -51,13 +52,45 @@ TRAINED_MODEL_DIR: str = "trained_model"
 
 TRAINED_MODEL_NAME: str = "model.pt"
 
+BEST_MODEL_NAME: str = "best_model.pt"
+
 DEVICE: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 STEP_SIZE: int = 6
 
-GAMMA: int = 0.5
+GAMMA: float = 0.5
 
-EPOCH: int = 10
+EPOCH: int = 20
+
+# Transfer learning / model selection
+MODEL_TYPE: str = "efficientnet_b0"  # options: "efficientnet_b0", "resnet18", "custom"
+
+PRETRAINED: bool = True
+
+# Two-phase training
+HEAD_EPOCHS: int = 5  # epochs with frozen backbone
+
+FINETUNE_EPOCHS: int = 15  # epochs with unfrozen deeper layers
+
+# Optimizer
+LEARNING_RATE: float = 1e-3
+
+WEIGHT_DECAY: float = 1e-4
+
+# Class imbalance
+USE_CLASS_WEIGHTS: bool = True
+
+# Early stopping
+EARLY_STOPPING_PATIENCE: int = 7
+
+# Mixed precision
+MIXED_PRECISION: bool = True
+
+# Threshold tuning
+TUNE_THRESHOLD: bool = True
+
+# Reproducibility
+SEED: int = 42
 
 BENTOML_MODEL_NAME: str = "xray_model"
 

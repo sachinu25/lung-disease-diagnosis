@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from torch.utils.data.dataloader import DataLoader
 
 
@@ -24,10 +24,24 @@ class DataTransformationArtifact:
 class ModelTrainerArtifact:
     trained_model_path: str
 
+    best_val_accuracy: float = 0.0
+
+    best_threshold: float = 0.5
+
 
 @dataclass
 class ModelEvaluationArtifact:
     model_accuracy: float
+
+    model_precision: float = 0.0
+
+    model_recall: float = 0.0
+
+    model_f1: float = 0.0
+
+    model_roc_auc: float = 0.0
+
+    best_threshold: float = 0.5
 
 
 @dataclass

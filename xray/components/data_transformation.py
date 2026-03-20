@@ -3,7 +3,8 @@ import sys
 from typing import Tuple
 
 import joblib
-from torch.utils.data import DataLoader, Dataset
+import torch
+from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
@@ -36,12 +37,15 @@ class DataTransformation:
                 [
                     transforms.Resize(self.data_transformation_config.RESIZE),
                     transforms.CenterCrop(self.data_transformation_config.CENTERCROP),
-                    transforms.ColorJitter(
-                        **self.data_transformation_config.color_jitter_transforms
-                    ),
                     transforms.RandomHorizontalFlip(),
                     transforms.RandomRotation(
                         self.data_transformation_config.RANDOMROTATION
+                    ),
+                    transforms.RandomAffine(
+                        degrees=0, translate=(0.05, 0.05), scale=(0.95, 1.05)
+                    ),
+                    transforms.ColorJitter(
+                        **self.data_transformation_config.color_jitter_transforms
                     ),
                     transforms.ToTensor(),
                     transforms.Normalize(
@@ -85,6 +89,22 @@ class DataTransformation:
         except Exception as e:
             raise XRayException(e, sys)
 
+    def _build_weighted_sampler(self, dataset: ImageFolder) -> WeightedRandomSampler:
+        """Build a WeightedRandomSampler to handle class imbalance."""
+        targets = dataset.targets
+        class_counts = torch.zeros(len(dataset.classes))
+        for label in targets:
+            class_counts[label] += 1
+
+        class_weights = 1.0 / class_counts.clamp(min=1)
+        sample_weights = torch.tensor([class_weights[t] for t in targets])
+
+        return WeightedRandomSampler(
+            weights=sample_weights,
+            num_samples=len(sample_weights),
+            replacement=True,
+        )
+
     def data_loader(
         self, train_transform: transforms.Compose, test_transform: transforms.Compose
     ) -> Tuple[DataLoader, DataLoader]:
@@ -103,12 +123,26 @@ class DataTransformation:
 
             logging.info("Created train data and test data paths")
 
-            train_loader: DataLoader = DataLoader(
-                train_data, **self.data_transformation_config.data_loader_params
-            )
+            loader_params = dict(self.data_transformation_config.data_loader_params)
+
+            if self.data_transformation_config.use_class_weights:
+                sampler = self._build_weighted_sampler(train_data)
+                # WeightedRandomSampler is mutually exclusive with shuffle=True
+                loader_params["shuffle"] = False
+                train_loader: DataLoader = DataLoader(
+                    train_data,
+                    sampler=sampler,
+                    **{k: v for k, v in loader_params.items() if k != "shuffle"},
+                )
+            else:
+                loader_params["shuffle"] = True
+                train_loader: DataLoader = DataLoader(train_data, **loader_params)
 
             test_loader: DataLoader = DataLoader(
-                test_data, **self.data_transformation_config.data_loader_params
+                test_data,
+                batch_size=loader_params["batch_size"],
+                shuffle=False,
+                pin_memory=loader_params.get("pin_memory", True),
             )
 
             logging.info("Exited the data_loader method of Data transformation class")
