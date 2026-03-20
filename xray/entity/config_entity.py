@@ -51,6 +51,8 @@ class DataTransformationConfig:
             "pin_memory": PIN_MEMORY,
         }
 
+        self.use_class_weights: bool = USE_CLASS_WEIGHTS
+
         self.artifact_dir: str = os.path.join(
             ARTIFACT_DIR, TIMESTAMP, "data_transformation"
         )
@@ -67,23 +69,46 @@ class DataTransformationConfig:
 @dataclass
 class ModelTrainerConfig:
     def __init__(self):
-        self.artifact_dir: int = os.path.join(ARTIFACT_DIR, TIMESTAMP, "model_training")
+        self.artifact_dir: str = os.path.join(ARTIFACT_DIR, TIMESTAMP, "model_training")
 
         self.trained_bentoml_model_name: str = "xray_model"
 
-        self.trained_model_path: int = os.path.join(
+        self.trained_model_path: str = os.path.join(
             self.artifact_dir, TRAINED_MODEL_NAME
+        )
+
+        self.best_model_path: str = os.path.join(
+            self.artifact_dir, BEST_MODEL_NAME
         )
 
         self.train_transforms_key: str = TRAIN_TRANSFORMS_KEY
 
         self.epochs: int = EPOCH
 
-        self.optimizer_params: dict = {"lr": 0.01, "momentum": 0.8}
+        self.head_epochs: int = HEAD_EPOCHS
+
+        self.finetune_epochs: int = FINETUNE_EPOCHS
+
+        self.optimizer_params: dict = {
+            "lr": LEARNING_RATE,
+            "weight_decay": WEIGHT_DECAY,
+        }
 
         self.scheduler_params: dict = {"step_size": STEP_SIZE, "gamma": GAMMA}
 
         self.device: device = DEVICE
+
+        self.model_type: str = MODEL_TYPE
+
+        self.pretrained: bool = PRETRAINED
+
+        self.mixed_precision: bool = MIXED_PRECISION
+
+        self.early_stopping_patience: int = EARLY_STOPPING_PATIENCE
+
+        self.tune_threshold: bool = TUNE_THRESHOLD
+
+        self.seed: int = SEED
 
 
 @dataclass
@@ -91,15 +116,15 @@ class ModelEvaluationConfig:
     def __init__(self):
         self.device: device = DEVICE
 
-        self.test_loss: int = 0
+        self.test_loss: float = 0.0
 
-        self.test_accuracy: int = 0
+        self.test_accuracy: float = 0.0
 
         self.total: int = 0
 
         self.total_batch: int = 0
 
-        self.optimizer_params: dict = {"lr": 0.01, "momentum": 0.8}
+        self.tune_threshold: bool = TUNE_THRESHOLD
 
 
 # Model Pusher Configurations
